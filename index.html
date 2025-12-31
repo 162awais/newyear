@@ -7,13 +7,450 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #000;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460, #533483);
+            background-size: 400% 400%;
+            animation: bgMove 10s ease infinite;
+        }
+        
+        @keyframes bgMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255,215,0,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+        
+        .hero-content { z-index: 10; }
+        
+        .main-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4, #45b7d1);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textGlow 3s ease infinite, textMove 2s ease-in-out infinite;
+        }
+        
+        .year {
+            font-family: 'Orbitron', monospace;
+            font-size: 6rem;
+            font-weight: 900;
+            color: #ffd700;
+            text-shadow: 0 0 50px #ffd700;
+            animation: yearGlow 2s ease-in-out infinite alternate;
+            margin: 20px 0;
+        }
+        
+        @keyframes textGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        @keyframes textMove {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes yearGlow {
+            0% { text-shadow: 0 0 30px #ffd700; }
+            100% { text-shadow: 0 0 60px #ffd700, 0 0 90px #ffd700; }
+        }
+        
+        .subtitle { font-size: 1.5rem; margin: 30px 0; opacity: 0.9; }
+        .hero-buttons { margin-top: 40px; }
+        
+        .glow-btn, .magic-btn {
+            padding: 15px 40px;
+            margin: 10px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .glow-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ffd700);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.4);
+        }
+        
+        .glow-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(255,107,107,0.6);
+        }
+        
+        .magic-btn {
+            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+            color: white;
+            box-shadow: 0 10px 30px rgba(78,205,196,0.4);
+        }
+        
+        .magic-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(78,205,196,0.6);
+        }
+        
+        .cards-area {
+            padding: 100px 0;
+            background: linear-gradient(135deg, rgba(26,26,46,0.8), rgba(22,33,62,0.8));
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 60px;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .wish-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wish-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .wish-card:hover::before { left: 100%; }
+        
+        .wish-card:hover {
+            transform: translateY(-15px) rotateY(5deg);
+            box-shadow: 0 30px 60px rgba(255,215,0,0.3);
+            border-color: #ffd700;
+        }
+        
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .wish-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+        
+        .wish-card p { font-size: 1rem; line-height: 1.6; opacity: 0.9; }
+        
+        .countdown-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, rgba(15,52,96,0.8), rgba(83,52,131,0.8));
+        }
+        
+        .timer-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+            color: #ffd700;
+        }
+        
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .time-box {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(20px);
+            border: 2px solid #ffd700;
+            border-radius: 20px;
+            padding: 30px 25px;
+            min-width: 120px;
+            animation: timeGlow 2s ease-in-out infinite alternate;
+        }
+        
+        .time-box span {
+            display: block;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ffd700;
+            font-family: 'Orbitron', monospace;
+        }
+        
+        .time-box label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            margin-top: 10px;
+        }
+        
+        @keyframes timeGlow {
+            0% { box-shadow: 0 0 20px rgba(255,215,0,0.3); }
+            100% { box-shadow: 0 0 40px rgba(255,215,0,0.6); }
+        }
+        
+        .trees-area {
+            padding: 100px 0;
+            background: linear-gradient(135deg, rgba(22,33,62,0.8), rgba(15,52,96,0.8));
+        }
+        
+        .trees-container {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            flex-wrap: wrap;
+        }
+        
+        .tree-item { text-align: center; }
+        
+        .tree {
+            position: relative;
+            height: 300px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tree:hover { transform: scale(1.1); }
+        
+        .tree-top, .tree-middle, .tree-bottom {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+        }
+        
+        .tree-top {
+            top: 0;
+            border-bottom: 80px solid #32cd32;
+            border-left-width: 30px;
+            border-right-width: 30px;
+        }
+        
+        .tree-middle {
+            top: 60px;
+            border-bottom: 80px solid #228b22;
+        }
+        
+        .tree-bottom {
+            top: 120px;
+            border-bottom: 80px solid #006400;
+            border-left-width: 50px;
+            border-right-width: 50px;
+        }
+        
+        .trunk {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 60px;
+            background: #8b4513;
+            border-radius: 10px;
+        }
+        
+        .wish-tag {
+            position: absolute;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            animation: tagSwing 4s ease-in-out infinite;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .wish-tag.left { top: 100px; left: -25px; }
+        .wish-tag.right { top: 120px; right: -25px; }
+        .wish-tag.top { top: 60px; left: 50%; transform: translateX(-50%); }
+        
+        @keyframes tagSwing {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+        
+        .tree-item h4 {
+            margin-top: 20px;
+            color: #ffd700;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .games-area {
+            padding: 100px 0;
+            background: linear-gradient(135deg, rgba(83,52,131,0.8), rgba(26,26,46,0.8));
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .game-box {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .game-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #ffd700;
+        }
+        
+        #gameArea {
+            height: 200px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #wishBox {
+            background: rgba(255,215,0,0.1);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 40px 20px;
+            margin: 20px 0;
+            font-size: 1.2rem;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .game-btn {
+            background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .game-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(78,205,196,0.4);
+        }
+        
+        .score {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffd700;
+        }
+        
+        @keyframes messageGlow {
+            0% { text-shadow: 0 0 20px #ffd700; }
+            100% { text-shadow: 0 0 40px #ffd700, 0 0 60px #ffd700; }
+        }
+        
+        @keyframes targetGlow {
+            0% { box-shadow: 0 0 15px #ffd700; }
+            100% { box-shadow: 0 0 30px #ffd700, 0 0 45px #ff6b6b; }
+        }
+        
+        @keyframes wishGlow {
+            0%, 100% { background: rgba(255,215,0,0.1); }
+            50% { background: rgba(255,215,0,0.3); }
+        }
+        
+        @media (max-width: 768px) {
+            .main-title { font-size: 2.5rem; }
+            .year { font-size: 4rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .trees-container { flex-direction: column; align-items: center; }
+            .countdown { gap: 15px; }
+            .time-box { min-width: 100px; padding: 20px 15px; }
+        }
+    </style>
 </head>
 <body>
-    <!-- Particle Background -->
     <div id="particles"></div>
     
-    <!-- Main Hero -->
     <section class="hero">
         <div class="hero-bg"></div>
         <div class="container text-center">
@@ -29,7 +466,6 @@
         </div>
     </section>
 
-    <!-- Wish Cards -->
     <section class="cards-area">
         <div class="container">
             <h2 class="section-title">💫 New Year Messages 💫</h2>
@@ -68,7 +504,6 @@
         </div>
     </section>
 
-    <!-- Countdown Timer -->
     <section class="countdown-section">
         <div class="container text-center">
             <h2 class="timer-title">⏰ Next New Year Countdown ⏰</h2>
@@ -93,7 +528,6 @@
         </div>
     </section>
 
-    <!-- Wish Trees -->
     <section class="trees-area">
         <div class="container">
             <h2 class="section-title">🎄 Magic Wish Trees 🎄</h2>
@@ -104,9 +538,9 @@
                         <div class="tree-middle"></div>
                         <div class="tree-bottom"></div>
                         <div class="trunk"></div>
-                        <div class="wish-tag left">💫 Dreams</div>
-                        <div class="wish-tag right">🎯 Goals</div>
-                        <div class="wish-tag top">✨ Magic</div>
+                        <div class="wish-tag left" onclick="tagClick(this)">💫 Dreams</div>
+                        <div class="wish-tag right" onclick="tagClick(this)">🎯 Goals</div>
+                        <div class="wish-tag top" onclick="tagClick(this)">✨ Magic</div>
                     </div>
                     <h4>Success Tree</h4>
                 </div>
@@ -116,9 +550,9 @@
                         <div class="tree-middle"></div>
                         <div class="tree-bottom"></div>
                         <div class="trunk"></div>
-                        <div class="wish-tag left">❤️ Love</div>
-                        <div class="wish-tag right">😊 Joy</div>
-                        <div class="wish-tag top">🌟 Hope</div>
+                        <div class="wish-tag left" onclick="tagClick(this)">❤️ Love</div>
+                        <div class="wish-tag right" onclick="tagClick(this)">😊 Joy</div>
+                        <div class="wish-tag top" onclick="tagClick(this)">🌟 Hope</div>
                     </div>
                     <h4>Happiness Tree</h4>
                 </div>
@@ -128,9 +562,9 @@
                         <div class="tree-middle"></div>
                         <div class="tree-bottom"></div>
                         <div class="trunk"></div>
-                        <div class="wish-tag left">🎊 Fun</div>
-                        <div class="wish-tag right">🌈 Peace</div>
-                        <div class="wish-tag top">💎 Wealth</div>
+                        <div class="wish-tag left" onclick="tagClick(this)">🎊 Fun</div>
+                        <div class="wish-tag right" onclick="tagClick(this)">🌈 Peace</div>
+                        <div class="wish-tag top" onclick="tagClick(this)">💎 Wealth</div>
                     </div>
                     <h4>Prosperity Tree</h4>
                 </div>
@@ -138,7 +572,6 @@
         </div>
     </section>
 
-    <!-- Games Section -->
     <section class="games-area">
         <div class="container">
             <h2 class="section-title">🎮 New Year Games 🎮</h2>
@@ -158,7 +591,244 @@
         </div>
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+    <script>
+        // Pakistani Time Countdown
+        function updateCountdown() {
+            const nextYear = new Date('January 1, 2026 00:00:00 GMT+0500').getTime();
+            const now = new Date().getTime();
+            const distance = nextYear - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Fireworks Effect
+        function createFirework(x, y) {
+            const colors = ['#ffd700', '#ff6b6b', '#4ecdc4', '#45b7d1', '#ff9ff3', '#98fb98'];
+            
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.width = '6px';
+                particle.style.height = '6px';
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '9999';
+                particle.style.boxShadow = '0 0 10px currentColor';
+                
+                document.body.appendChild(particle);
+                
+                const angle = (i * 24) * Math.PI / 180;
+                const velocity = 100 + Math.random() * 100;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+                
+                let posX = x;
+                let posY = y;
+                let opacity = 1;
+                
+                const animate = () => {
+                    posX += vx * 0.02;
+                    posY += vy * 0.02;
+                    opacity -= 0.015;
+                    
+                    particle.style.left = posX + 'px';
+                    particle.style.top = posY + 'px';
+                    particle.style.opacity = opacity;
+                    
+                    if (opacity > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        document.body.removeChild(particle);
+                    }
+                };
+                
+                animate();
+            }
+        }
+
+        // Celebrate Function
+        function celebrate() {
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight * 0.6;
+                    createFirework(x, y);
+                }, i * 200);
+            }
+            showMessage('🎉 HAPPY NEW YEAR 2025! 🎉', 3000);
+        }
+
+        // Make Wish Function
+        function makeWish() {
+            const wishes = [
+                '✨ Your dreams will come true in 2025!',
+                '🌟 Success and happiness await you!',
+                '💫 This year will be magical for you!',
+                '🎯 All your goals will be achieved!',
+                '💖 Love and joy will surround you!',
+                '🚀 Amazing opportunities are coming!'
+            ];
+            
+            const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
+            showMessage(randomWish, 2500);
+            createFirework(window.innerWidth / 2, window.innerHeight / 2);
+        }
+
+        // Show Message Function
+        function showMessage(text, duration) {
+            const message = document.createElement('div');
+            message.textContent = text;
+            message.style.position = 'fixed';
+            message.style.top = '50%';
+            message.style.left = '50%';
+            message.style.transform = 'translate(-50%, -50%)';
+            message.style.fontSize = '2.5rem';
+            message.style.fontWeight = 'bold';
+            message.style.color = '#ffd700';
+            message.style.textAlign = 'center';
+            message.style.zIndex = '10000';
+            message.style.textShadow = '2px 2px 4px rgba(0,0,0,0.8)';
+            message.style.animation = 'messageGlow 1s ease-in-out infinite alternate';
+            message.style.padding = '20px';
+            message.style.background = 'rgba(0,0,0,0.7)';
+            message.style.borderRadius = '20px';
+            message.style.border = '2px solid #ffd700';
+            
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                if (document.body.contains(message)) {
+                    document.body.removeChild(message);
+                }
+            }, duration);
+        }
+
+        // Card Click Effect
+        function cardClick(card) {
+            const rect = card.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            
+            createFirework(x, y);
+            
+            card.style.transform = 'scale(1.1) rotateY(10deg)';
+            setTimeout(() => {
+                card.style.transform = '';
+            }, 300);
+        }
+
+        // Tag Click Effect
+        function tagClick(tag) {
+            const rect = tag.getBoundingClientRect();
+            createFirework(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        }
+
+        // Game Variables
+        let gameScore = 0;
+        let gameActive = false;
+
+        // Start Firework Game
+        function startGame() {
+            if (gameActive) return;
+            
+            gameScore = 0;
+            gameActive = true;
+            document.getElementById('score').textContent = gameScore;
+            
+            const gameArea = document.getElementById('gameArea');
+            gameArea.innerHTML = '';
+            
+            const createTarget = () => {
+                if (!gameActive) return;
+                
+                const target = document.createElement('div');
+                target.style.position = 'absolute';
+                target.style.width = '40px';
+                target.style.height = '40px';
+                target.style.background = 'linear-gradient(45deg, #ffd700, #ff6b6b)';
+                target.style.borderRadius = '50%';
+                target.style.left = Math.random() * 320 + 'px';
+                target.style.top = Math.random() * 120 + 'px';
+                target.style.cursor = 'pointer';
+                target.style.animation = 'targetGlow 1s ease-in-out infinite alternate';
+                target.style.boxShadow = '0 0 20px #ffd700';
+                
+                target.onclick = () => {
+                    gameScore += 10;
+                    document.getElementById('score').textContent = gameScore;
+                    createFirework(target.offsetLeft + 20, target.offsetTop + 20);
+                    target.remove();
+                };
+                
+                gameArea.appendChild(target);
+                
+                setTimeout(() => {
+                    if (target.parentNode) {
+                        target.remove();
+                    }
+                }, 2000);
+            };
+            
+            const gameInterval = setInterval(createTarget, 800);
+            
+            setTimeout(() => {
+                gameActive = false;
+                clearInterval(gameInterval);
+                showMessage(`Game Over! Score: ${gameScore}`, 2000);
+            }, 15000);
+        }
+
+        // Wish Generator
+        function getWish() {
+            const wishes = [
+                '🌟 May 2025 bring you endless joy and success!',
+                '✨ Your dreams are about to become reality!',
+                '💫 Amazing adventures await you this year!',
+                '🎯 You will achieve all your goals in 2025!',
+                '💖 Love and happiness will fill your life!',
+                '🚀 Great opportunities are heading your way!',
+                '🌈 This year will be colorful and beautiful!',
+                '⭐ You will shine brighter than ever before!'
+            ];
+            
+            const wishBox = document.getElementById('wishBox');
+            const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
+            
+            wishBox.textContent = randomWish;
+            wishBox.style.animation = 'wishGlow 1s ease-in-out';
+            
+            const rect = wishBox.getBoundingClientRect();
+            createFirework(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            
+            setTimeout(() => {
+                wishBox.style.animation = '';
+            }, 1000);
+        }
+
+        // Auto Fireworks
+        setInterval(() => {
+            if (Math.random() > 0.8) {
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight * 0.4;
+                createFirework(x, y);
+            }
+        }, 4000);
+
+        console.log('🎉 Welcome to New Year 2025! 🎉');
+    </script>
 </body>
 </html>
